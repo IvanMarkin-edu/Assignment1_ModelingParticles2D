@@ -4,27 +4,27 @@ import matplotlib.animation as animation
 import time
 
 
-# Класс частицы
+# ГЉГ«Г Г±Г± Г·Г Г±ГІГЁГ¶Г»
 class Particle:
     def __init__(self, x, y, vx, vy, mass, radius):
-        self.x = x                    # координата x частицы
-        self.y = y                    # координата y частицы
-        self.vx = vx                  # y-компонента скорости
-        self.vy = vy                  # x-компонента скорости частицы
-        self.mass = mass              # масса частицы
-        self.radius = radius          # радиус частицы
+        self.x = x                    # ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ  x Г·Г Г±ГІГЁГ¶Г»
+        self.y = y                    # ГЄГ®Г®Г°Г¤ГЁГ­Г ГІГ  y Г·Г Г±ГІГЁГ¶Г»
+        self.vx = vx                  # y-ГЄГ®Г¬ГЇГ®Г­ГҐГ­ГІГ  Г±ГЄГ®Г°Г®Г±ГІГЁ
+        self.vy = vy                  # x-ГЄГ®Г¬ГЇГ®Г­ГҐГ­ГІГ  Г±ГЄГ®Г°Г®Г±ГІГЁ Г·Г Г±ГІГЁГ¶Г»
+        self.mass = mass              # Г¬Г Г±Г±Г  Г·Г Г±ГІГЁГ¶Г»
+        self.radius = radius          # Г°Г Г¤ГЁГіГ± Г·Г Г±ГІГЁГ¶Г»
 
-# Создание случайных частиц
+# Г‘Г®Г§Г¤Г Г­ГЁГҐ Г±Г«ГіГ·Г Г©Г­Г»Гµ Г·Г Г±ГІГЁГ¶
 def create_particles(num_particles, box_size):
     particles = []
     for _ in range(num_particles):
         while True:
-            # Возможные параметры
+            # Г‚Г®Г§Г¬Г®Г¦Г­Г»ГҐ ГЇГ Г°Г Г¬ГҐГІГ°Г»
             x = np.random.uniform(0.2, box_size - 0.2)
             y = np.random.uniform(0.2, box_size - 0.2)
             radius = 0.3
 
-            # Проверка, что частицы не сталкиваются при генерации
+            # ГЏГ°Г®ГўГҐГ°ГЄГ , Г·ГІГ® Г·Г Г±ГІГЁГ¶Г» Г­ГҐ Г±ГІГ Г«ГЄГЁГўГ ГѕГІГ±Гї ГЇГ°ГЁ ГЈГҐГ­ГҐГ°Г Г¶ГЁГЁ
             collision = False
             for p in particles:
                 dx = x - p.x
@@ -41,13 +41,13 @@ def create_particles(num_particles, box_size):
         particles.append(Particle(x, y, vx, vy, mass, radius))
     return particles
 
-# Движение частиц
+# Г„ГўГЁГ¦ГҐГ­ГЁГҐ Г·Г Г±ГІГЁГ¶
 def regular_movement(particles, dt):
     for p in particles:
         p.x += p.vx * dt
         p.y += p.vy * dt
 
-# Обработка столкновения со стеной
+# ГЋГЎГ°Г ГЎГ®ГІГЄГ  Г±ГІГ®Г«ГЄГ­Г®ГўГҐГ­ГЁГї Г±Г® Г±ГІГҐГ­Г®Г©
 def dealwith_wall_collisions(particles, box_size):
     for p in particles:
         if p.x < p.radius:
@@ -63,7 +63,7 @@ def dealwith_wall_collisions(particles, box_size):
             p.y = box_size - p.radius
             p.vy = -abs(p.vy)
 
-# Обработка столкновения частиц
+# ГЋГЎГ°Г ГЎГ®ГІГЄГ  Г±ГІГ®Г«ГЄГ­Г®ГўГҐГ­ГЁГї Г·Г Г±ГІГЁГ¶
 def dealwith_particle_collisions(particles):
     n = len(particles)
     for i in range(n):
@@ -77,28 +77,28 @@ def dealwith_particle_collisions(particles):
             
             if distance_sq < min_dist**2:
                 distance = np.sqrt(distance_sq)
-                # вектор нормали, направленный от центра одной частицы к центру другой
+                # ГўГҐГЄГІГ®Г° Г­Г®Г°Г¬Г Г«ГЁ, Г­Г ГЇГ°Г ГўГ«ГҐГ­Г­Г»Г© Г®ГІ Г¶ГҐГ­ГІГ°Г  Г®Г¤Г­Г®Г© Г·Г Г±ГІГЁГ¶Г» ГЄ Г¶ГҐГ­ГІГ°Гі Г¤Г°ГіГЈГ®Г©
                 nx = dx / distance
                 ny = dy / distance
  
-                # относительная скорость в проекции на вектор нормали
+                # Г®ГІГ­Г®Г±ГЁГІГҐГ«ГјГ­Г Гї Г±ГЄГ®Г°Г®Г±ГІГј Гў ГЇГ°Г®ГҐГЄГ¶ГЁГЁ Г­Г  ГўГҐГЄГІГ®Г° Г­Г®Г°Г¬Г Г«ГЁ
                 dvx = p1.vx - p2.vx
                 dvy = p1.vy - p2.vy
                 velocity_normal = dvx * nx + dvy * ny
                 
-                # если частицы движутся друг от друга, то столкновения нет
+                # ГҐГ±Г«ГЁ Г·Г Г±ГІГЁГ¶Г» Г¤ГўГЁГ¦ГіГІГ±Гї Г¤Г°ГіГЈ Г®ГІ Г¤Г°ГіГЈГ , ГІГ® Г±ГІГ®Г«ГЄГ­Г®ГўГҐГ­ГЁГї Г­ГҐГІ
                 if velocity_normal > 0:
                     continue
                 
                 c = -(2.0) * velocity_normal / (1/p1.mass + 1/p2.mass)
                 
-                # обновление скоростей
+                # Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г±ГЄГ®Г°Г®Г±ГІГҐГ©
                 p1.vx += c * nx / p1.mass
                 p1.vy += c * ny / p1.mass
                 p2.vx -= c * nx / p2.mass
                 p2.vy -= c * ny / p2.mass
                 
-                # исправление пересечений частиц
+                # ГЁГ±ГЇГ°Г ГўГ«ГҐГ­ГЁГҐ ГЇГҐГ°ГҐГ±ГҐГ·ГҐГ­ГЁГ© Г·Г Г±ГІГЁГ¶
                 overlap = (min_dist - distance) / 2.0
                 p1.x += nx * overlap
                 p1.y += ny * overlap
@@ -154,12 +154,12 @@ def animate_simulation(data, box_size):
 if __name__ == "__main__":
     num_particles = 10
 
-    # вывод анимации
+    # ГўГ»ГўГ®Г¤ Г Г­ГЁГ¬Г Г¶ГЁГЁ
     simulation_data, box_size = simulate(num_particles=num_particles)
     animate_simulation(simulation_data, box_size)
 
 
-    # Набор датасета.
+    # ГЌГ ГЎГ®Г° Г¤Г ГІГ Г±ГҐГІГ .
 #    start_time = time.time()
 #    for _ in range(10000):
 #        simulation_data, box_size = simulate(num_particles=num_particles)
