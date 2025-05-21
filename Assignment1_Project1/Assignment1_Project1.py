@@ -4,7 +4,7 @@ import matplotlib.animation as animation
 import time
 
 
-# Êëàññ ÷àñòèöû
+# Class of particle
 class Particle:
     def __init__(self, x, y, vx, vy, mass, radius):
         self.x = x                    # êîîðäèíàòà x ÷àñòèöû
@@ -14,17 +14,17 @@ class Particle:
         self.mass = mass              # ìàññà ÷àñòèöû
         self.radius = radius          # ðàäèóñ ÷àñòèöû
 
-# Ñîçäàíèå ñëó÷àéíûõ ÷àñòèö
+# Creating any number from 0 to 10 of particles with random parameters
 def create_particles(num_particles, box_size):
     particles = []
     for _ in range(num_particles):
         while True:
-            # Âîçìîæíûå ïàðàìåòðû
+            # Applicants to parameters
             x = np.random.uniform(0.2, box_size - 0.2)
             y = np.random.uniform(0.2, box_size - 0.2)
             radius = 0.3
 
-            # Ïðîâåðêà, ÷òî ÷àñòèöû íå ñòàëêèâàþòñÿ ïðè ãåíåðàöèè
+            # Checking collision with previous ones
             collision = False
             for p in particles:
                 dx = x - p.x
@@ -41,13 +41,13 @@ def create_particles(num_particles, box_size):
         particles.append(Particle(x, y, vx, vy, mass, radius))
     return particles
 
-# Äâèæåíèå ÷àñòèö
+# Movement without collision
 def regular_movement(particles, dt):
     for p in particles:
         p.x += p.vx * dt
         p.y += p.vy * dt
 
-# Îáðàáîòêà ñòîëêíîâåíèÿ ñî ñòåíîé
+# Processing of collision particle with wall
 def dealwith_wall_collisions(particles, box_size):
     for p in particles:
         if p.x < p.radius:
@@ -62,8 +62,8 @@ def dealwith_wall_collisions(particles, box_size):
         elif p.y > box_size - p.radius:
             p.y = box_size - p.radius
             p.vy = -abs(p.vy)
-
-# Îáðàáîòêà ñòîëêíîâåíèÿ ÷àñòèö
+            
+# Collision of particles
 def dealwith_particle_collisions(particles):
     n = len(particles)
     for i in range(n):
@@ -81,24 +81,24 @@ def dealwith_particle_collisions(particles):
                 nx = dx / distance
                 ny = dy / distance
  
-                # îòíîñèòåëüíàÿ ñêîðîñòü â ïðîåêöèè íà âåêòîð íîðìàëè
+                # Velocity projection on normal
                 dvx = p1.vx - p2.vx
                 dvy = p1.vy - p2.vy
                 velocity_normal = dvx * nx + dvy * ny
                 
-                # åñëè ÷àñòèöû äâèæóòñÿ äðóã îò äðóãà, òî ñòîëêíîâåíèÿ íåò
+                # Check for a collision
                 if velocity_normal > 0:
                     continue
                 
                 c = -(2.0) * velocity_normal / (1/p1.mass + 1/p2.mass)
                 
-                # îáíîâëåíèå ñêîðîñòåé
+                # new parameteres of particles
                 p1.vx += c * nx / p1.mass
                 p1.vy += c * ny / p1.mass
                 p2.vx -= c * nx / p2.mass
                 p2.vy -= c * ny / p2.mass
                 
-                # èñïðàâëåíèå ïåðåñå÷åíèé ÷àñòèö
+                # deal with possible overlap
                 overlap = (min_dist - distance) / 2.0
                 p1.x += nx * overlap
                 p1.y += ny * overlap
@@ -154,12 +154,12 @@ def animate_simulation(data, box_size):
 if __name__ == "__main__":
     num_particles = 10
 
-    # âûâîä àíèìàöèè
+    # Animation
     simulation_data, box_size = simulate(num_particles=num_particles)
     animate_simulation(simulation_data, box_size)
 
 
-    # Íàáîð äàòàñåòà.
+    # Creating a dataset.
 #    start_time = time.time()
 #    for _ in range(10000):
 #        simulation_data, box_size = simulate(num_particles=num_particles)
